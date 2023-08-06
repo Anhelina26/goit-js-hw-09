@@ -21,6 +21,14 @@ let timerInterval = null;
 let selectedDate = null;
 let isStarted = false;
 
+function updateCounterDisplay({ days, hours, minutes, seconds }) {
+  daysCounterEl.textContent = addLeadingZero(days);
+  hoursCounterEl.textContent = addLeadingZero(hours);
+  minutesCounterEl.textContent = addLeadingZero(minutes);
+  secondsCounterEl.textContent = addLeadingZero(seconds);
+}
+
+
 const fpSettingsObj = {
   enableTime: true,
   time_24hr: true,
@@ -53,10 +61,8 @@ function timerStartHandler() {
   timerInterval = setInterval(() => {
     const timer = convertMs(counterDate());
 
-    daysCounterEl.textContent = addLeadingZero(timer.days);
-    hoursCounterEl.textContent = addLeadingZero(timer.hours);
-    minutesCounterEl.textContent = addLeadingZero(timer.minutes);
-    secondsCounterEl.textContent = addLeadingZero(timer.seconds);
+    updateCounterDisplay(timer);
+
   }, 1000);
 
   setTimeout(() => {
@@ -65,7 +71,7 @@ function timerStartHandler() {
 }
 
 function currentDate() {
-  return new Date().getTime();
+  return Date.now();
 }
 
 function counterDate() {
