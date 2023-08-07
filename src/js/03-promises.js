@@ -4,12 +4,16 @@ const formEl = document.querySelector('.form');
 
 formEl.lastElementChild.classList.add('btn');
 
+let timeoutId = null;
+
 formEl.addEventListener('submit', formSubmitHandler);
 
-function formSubmitHandler(event) {
+function formSubmitHandler (event) {
   event.preventDefault();
 
-  const { delay, step, amount } = formValuesPicker(event);
+  formValuesPicker(event);
+
+  let { delay, step, amount } = formValuesPicker(event);
 
   for (let position = 1; position <= amount; position += 1) {
     createPromise(position, delay)
@@ -17,16 +21,16 @@ function formSubmitHandler(event) {
         Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
       })
       .catch(({ position, delay }) => {
-        Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
-      });
+       Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);      
+      }) 
 
-    delay += step;
+      delay += step;
 
-    event.currentTarget.reset();
-  }
+      event.currentTarget.reset()
+  }     
 }
 
-function formValuesPicker(event) {
+function formValuesPicker (event) {
   const promiseObj = {
     delay: Number(event.currentTarget.elements.delay.value),
     step: Number(event.currentTarget.elements.step.value),
@@ -38,14 +42,14 @@ function formValuesPicker(event) {
 
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
-    const shouldResolve = Math.random() > 0.3;
+  const shouldResolve = Math.random() > 0.3;
 
-    const timeoutId = setTimeout(() => {
+  timeoutId = setTimeout(() => {
       if (shouldResolve) {
-        resolve({ position, delay });
+      resolve ({ position, delay });
       } else {
-        reject({ position, delay });
-      }
-    }, delay);
-  });
+      reject ({ position, delay });
+      }}, delay)        
+  }) 
 }
+
